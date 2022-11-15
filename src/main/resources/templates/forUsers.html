@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User вошедший</title>
+</head>
+<body>
+<h1>Карточка вошедшего пользователя (его роль USER):</h1>
+<p th:text="|ID:  ${user.getId()}|">id</p>
+<p th:text="|Имя:  ${user.getName()}|">name</p>
+<p th:text="|Возраст:  ${user.getAge()}|">age</p>
+<p th:text="|Адрес электронной почты:  ${user.getEmail()}|">email</p>
+<p th:text="|Username:  ${user.getUsername()}|">username</p>
+<p th:text="|Пароль:  ${user.getPassword()}|">password</p>
+<p th:text="|Роль(роли):  ${user.getRoles()}|">roles</p>
+<br/>
+<a href="/admin">Назад к списку</a>
+<br/>
+<br/>
+<a href="/logout">Выйти</a>
+</body>
+</html>

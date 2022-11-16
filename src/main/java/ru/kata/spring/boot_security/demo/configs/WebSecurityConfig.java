@@ -1,9 +1,7 @@
 package ru.kata.spring.boot_security.demo.configs;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -12,21 +10,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.kata.spring.boot_security.demo.service.UserServiceImpl;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 //Настройка секьюрности по определенным URL, а также настройка UserDetails и GrantedAuthority:
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private UserServiceImpl userService;
-
-    @Autowired
-    public void setUserServiceImpl(UserServiceImpl userService) {
-        this.userService = userService;
-    }
-
     private final SuccessUserHandler successUserHandler;
+    private final UserServiceImpl userService;
 
-    public WebSecurityConfig(SuccessUserHandler successUserHandler) {
+    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserServiceImpl userService) {
         this.successUserHandler = successUserHandler;
+        this.userService = userService;
     }
 
     //Конфигурируем SpringSecurity (какая страница за что отвечеат + конфигурация авторизации)
@@ -35,7 +26,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 //пользователи ходят там, где вот в скобках указано (permitAll = разрешить все):
-                //.antMatchers("/registrAdmin", "/users/showUserInfo").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user").hasRole("USER")
                 //для всех остальных страниц мы даем доступ и юзеру и админу
                 .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and()
